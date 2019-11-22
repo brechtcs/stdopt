@@ -10,7 +10,7 @@ module.exports = function base (valid) {
       if (valid(val)) {
         return val
       }
-      throw new TypeError(ERR_UNWRAP)
+      throw new TypeError(ERR_UNWRAP + val)
     }
 
     return { or, value }
