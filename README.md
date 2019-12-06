@@ -42,6 +42,14 @@ var list = require('stdopt/list')
 list([1, 2, 3]).value() // => [1, 2, 3]
 list(true).or([4, 5, 6]).value() // => [4, 5, 6]
 list({0: 'stuff', length: 1}).value() // => ['stuff']
+
+// convert any type to singleton list
+opt('some data').list() // => ['some data']
+string('some string').list() // => ['some string']
+number(5).list() // => [5]
+boolean(true).list() // => [true]
+hash({stuff: true}).list() // => [{stuff: true}]
+list([1, 2, 3]).list() // same as list#value
 ```
 
 ## License

@@ -12,7 +12,7 @@ module.exports = function string (val) {
     return String(box.value())
   }
 
-  return { or, value }
+  return { ...box, or, value }
 }
 
 function isString (s) {

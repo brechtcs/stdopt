@@ -17,7 +17,7 @@ module.exports = function boolean (val) {
     }
   }
 
-  return { or, value }
+  return { ...box, or, value }
 }
 
 function isBoolean (b) {

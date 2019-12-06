@@ -10,8 +10,9 @@ module.exports = function list (val) {
   }
 
   function value () {
-    return Array.from(box.value())
+    var v = box.value()
+    return Array.isArray(v) ? v : Array.from(v)
   }
 
-  return { or, value }
+  return { or, value, list: value }
 }

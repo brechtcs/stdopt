@@ -13,6 +13,10 @@ module.exports = function base (valid) {
       throw new TypeError(ERR_UNWRAP + val)
     }
 
-    return { or, value }
+    function list () {
+      return [value()]
+    }
+
+    return { or, value, list }
   }
 }
