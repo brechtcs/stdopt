@@ -52,6 +52,23 @@ hash({stuff: true}).list() // => [{stuff: true}]
 list([1, 2, 3]).list() // same as list#value
 ```
 
+## Custom
+
+You can also create your own custom primitives, using the `Base` class and a custom `isValid` method.
+
+```js
+var Base = require('stdopt/base')
+var lowercase = Base.implement('lowercase string')
+
+lowercase.isValid = function (value) {
+  return typeof value === 'string' && value.toLowerCase() === value
+}
+
+lowercase('oh.').value() // => 'oh.'
+lowercase('AHA!').or('oh.').value() // => 'oh.'
+lowercase('AHA!').value() // => throws error
+```
+
 ## License
 
 Apache-2.0

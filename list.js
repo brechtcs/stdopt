@@ -1,18 +1,13 @@
-var base = require('./base')
+var Base = require('./base')
 var isArrayish = require('is-arrayish')
 
-module.exports = function list (val) {
-  var wrap = base(isArrayish)
-  var box = wrap(val)
+var List = Base.implement('list')
 
-  function or (fallback) {
-    return list(isArrayish(val) ? val : fallback)
-  }
+List.isValid = isArrayish
 
-  function value () {
-    var v = box.value()
-    return Array.isArray(v) ? v : Array.from(v)
-  }
-
-  return { or, value, list: value }
+List.prototype.value = List.prototype.list = function () {
+  var list = Base.value(this)
+  return Array.isArray(list) ? list : Array.from(list)
 }
+
+module.exports = List

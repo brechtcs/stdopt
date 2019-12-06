@@ -1,5 +1,8 @@
-var base = require('./base')
+var Base = require('./base')
+var Opt = Base.implement('defined')
 
-module.exports = base(function defined (val) {
+Opt.isValid = function (val) {
   return val !== undefined && val !== null
-})
+}
+
+module.exports = Opt

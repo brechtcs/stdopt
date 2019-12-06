@@ -1,10 +1,12 @@
-var base = require('./base')
+var Base = require('./base')
+var Num = Base.implement('number')
 
-module.exports = function (val) {
-  var wrap = base(isNumber)
-  return wrap(Number(val))
+Num.isValid = function (n) {
+  return !Number.isNaN(Number(n))
 }
 
-function isNumber (n) {
-  return typeof n === 'number' && !Number.isNaN(n)
+Num.prototype.value = function () {
+  return Number(Base.value(this))
 }
+
+module.exports = Num

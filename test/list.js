@@ -8,7 +8,7 @@ test('list', t => {
   t.deepEqual(list('blerf').or([]).value(), [])
   t.deepEqual(list('blerf').or({ 0: 1, length: 1 }).value(), [1])
 
-  t.throws(opt().list, /Invalid optional value: undefined/)
+  t.throws(() => opt().list())
   t.deepEqual(opt('any').list(), ['any'])
   t.deepEqual(opt.boolean(true).list(), [true])
   t.deepEqual(opt.hash({}).list(), [{}])

@@ -1,28 +1,20 @@
-var base = require('./base')
+var Base = require('./base')
+var Boolean = Base.implement('boolean')
 
-module.exports = function boolean (val) {
-  var wrap = base(isBoolean)
-  var box = wrap(val)
-
-  function or (fallback) {
-    return boolean(isBoolean(val) ? val : fallback)
-  }
-
-  function value () {
-    var str = box.value().toString()
-    switch (str.toLowerCase()) {
-      case 'false': return false
-      case 'true': return true
-      default: throw new Error('Illegal state')
-    }
-  }
-
-  return { ...box, or, value }
-}
-
-function isBoolean (b) {
+Boolean.isValid = function (b) {
   if (typeof b !== 'string') {
     return b === false || b === true
   }
   return b.toLowerCase() === 'false' || b.toLowerCase() === 'true'
 }
+
+Boolean.prototype.value = function () {
+  var str = String(Base.value(this))
+  switch (str.toLowerCase()) {
+    case 'false': return false
+    case 'true': return true
+    default: throw new Error('Illegal state')
+  }
+}
+
+module.exports = Boolean
