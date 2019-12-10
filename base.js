@@ -1,3 +1,5 @@
+var getIterator = require('es-get-iterator')
+
 var NO_VALIDATOR = 'No validator for '
 var DESCRIPTION = Symbol('description')
 var VALUE = Symbol('value')
@@ -46,8 +48,23 @@ Base.prototype.value = function () {
   throw new TypeError(`Invalid value ${this} (should be ${this[DESCRIPTION]})`)
 }
 
-Base.prototype.list = function () {
-  return [this.value()]
+Base.prototype.it = function () {
+  if (typeof this.constructor.isValid !== 'function') {
+    throw new TypeError(NO_VALIDATOR + this[DESCRIPTION])
+  }
+  if (!this.constructor.isValid(this[VALUE])) {
+    throw new TypeError(`Invalid value ${this} (should be ${this[DESCRIPTION]})`)
+  }
+  var val, it
+  val = this[VALUE]
+
+  if (typeof val !== 'string' && !(val instanceof String)) {
+    it = getIterator(val)
+  }
+  function * create () {
+    yield val
+  }
+  return it || create()
 }
 
 Base.prototype.toString = function () {

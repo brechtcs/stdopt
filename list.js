@@ -5,7 +5,7 @@ var List = Base.implement('list')
 
 List.isValid = isArrayish
 
-List.prototype.value = List.prototype.list = function () {
+List.prototype.value = function () {
   var list = Base.value(this)
   return Array.isArray(list) ? list : Array.from(list)
 }

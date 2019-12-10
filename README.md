@@ -43,13 +43,16 @@ list([1, 2, 3]).value() // => [1, 2, 3]
 list(true).or([4, 5, 6]).value() // => [4, 5, 6]
 list({0: 'stuff', length: 1}).value() // => ['stuff']
 
-// convert any type to singleton list
-opt('some data').list() // => ['some data']
-string('some string').list() // => ['some string']
-number(5).list() // => [5]
-boolean(true).list() // => [true]
-hash({stuff: true}).list() // => [{stuff: true}]
-list([1, 2, 3]).list() // same as list#value
+// create iterator for any type
+opt('some data').it().next() // => 'some data'
+string('some string').it().next() // => 'some string'
+number(5).it().next() // => 5
+boolean(true).it().next() // => true
+hash({stuff: true}).it().next() // => {stuff: true}
+
+var it = list([1, 2]).it()
+it.next() // => 1
+it.next() // => 2
 ```
 
 ## Custom

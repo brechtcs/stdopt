@@ -1,12 +1,13 @@
 {
   "name": "stdopt",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "description": "Wrap and validate optional values",
   "main": "index.js",
   "scripts": {
     "test": "tape test/*.js && standard"
   },
   "dependencies": {
+    "es-get-iterator": "^1.0.1",
     "is-arrayish": "^0.3.2"
   },
   "devDependencies": {
