@@ -59,7 +59,7 @@ Base.prototype.it = function () {
   val = this[VALUE]
 
   if (typeof val !== 'string' && !(val instanceof String)) {
-    it = getIterator(val)
+    it = (val[Symbol.asyncIterator] && val[Symbol.asyncIterator]()) || getIterator(val)
   }
   function * create () {
     yield val
