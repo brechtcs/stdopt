@@ -39,20 +39,14 @@ Base.prototype.or = function (fallback) {
 }
 
 Base.prototype.value = function () {
-  if (typeof this.constructor.isValid !== 'function') {
-    throw new TypeError(NO_VALIDATOR + this[DESCRIPTION])
-  }
-  if (this.constructor.isValid(this[VALUE])) {
+  if (this.isValid()) {
     return this[VALUE]
   }
   throw new TypeError(`Invalid value ${this} (should be ${this[DESCRIPTION]})`)
 }
 
 Base.prototype.it = function () {
-  if (typeof this.constructor.isValid !== 'function') {
-    throw new TypeError(NO_VALIDATOR + this[DESCRIPTION])
-  }
-  if (!this.constructor.isValid(this[VALUE])) {
+  if (!this.isValid()) {
     throw new TypeError(`Invalid value ${this} (should be ${this[DESCRIPTION]})`)
   }
   var val, it
@@ -65,6 +59,13 @@ Base.prototype.it = function () {
     yield val
   }
   return it || create()
+}
+
+Base.prototype.isValid = function () {
+  if (typeof this.constructor.isValid !== 'function') {
+    throw new TypeError(NO_VALIDATOR + this[DESCRIPTION])
+  }
+  return this.constructor.isValid(this[VALUE])
 }
 
 Base.prototype.toString = function () {
