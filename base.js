@@ -31,6 +31,13 @@ Base.value = function (opt) {
   return Base.prototype.value.call(opt)
 }
 
+Base.prototype.check = function () {
+  if (this.isValid()) {
+    return this
+  }
+  throw new TypeError(`Invalid value ${this} (should be ${this[DESCRIPTION]})`)
+}
+
 Base.prototype.or = function (fallback) {
   return this.isValid() ? this : new this.constructor(fallback)
 }
