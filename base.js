@@ -32,10 +32,7 @@ Base.value = function (opt) {
 }
 
 Base.prototype.or = function (fallback) {
-  if (typeof this.constructor.isValid !== 'function') {
-    throw new TypeError(NO_VALIDATOR + this[DESCRIPTION])
-  }
-  return this.constructor.isValid(this[VALUE]) ? this : new this.constructor(fallback)
+  return this.isValid() ? this : new this.constructor(fallback)
 }
 
 Base.prototype.value = function () {
