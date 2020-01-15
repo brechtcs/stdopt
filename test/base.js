@@ -4,7 +4,8 @@ test('opt', t => {
   var opt = require('../')
 
   t.equal(opt('value').value(), 'value')
-  t.throws(() => opt(null).value(), /Invalid value null \(should be defined\)/)
+  t.throws(() => opt(null).value(), /Invalid value:/)
+  t.throws(() => opt(null).or(new Error('nope')).value(), /nope/)
   t.equal(opt('value').or('nope').value(), 'value')
   t.equal(opt().or('nope').value(), 'nope')
   t.equal(opt().or().or('nope').value(), 'nope')
@@ -23,7 +24,7 @@ test('custom', t => {
 
   t.equal(Custom('custom').value(), 'custom')
   t.equal(Custom('stuff').or('custom').value(), 'custom')
-  t.throws(() => Custom('stuff').value(), /Invalid value stuff \(should be custom\)/)
+  t.throws(() => Custom('stuff').value(), /Invalid custom:/)
   t.throws(() => Fail('stuff').or('bleh').value(), /No validator for fail/)
   t.throws(() => Fail('stuff').value(), /No validator for fail/)
   t.end()

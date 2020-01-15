@@ -1,6 +1,3 @@
-var getIterator = require('es-get-iterator')
-
-var NO_VALIDATOR = 'No validator for '
 var DESCRIPTION = Symbol('description')
 var VALUE = Symbol('value')
 
@@ -8,9 +5,15 @@ function Base () {}
 
 Base.implement = function (name) {
   function Opt (val) {
-    if (!(this instanceof Opt)) return new Opt(val)
+    if (typeof Opt.isValid !== 'function') {
+      throw new TypeError('No validator for ' + name)
+    } else if (!(this instanceof Opt)) {
+      return new Opt(val)
+    }
     this[VALUE] = val
     this[DESCRIPTION] = name || 'stdopt'
+    this.isError = val instanceof Error
+    this.isValid = !this.isError && Opt.isValid(val)
   }
 
   Object.setPrototypeOf(Opt.prototype, Base.prototype)
@@ -32,44 +35,20 @@ Base.value = function (opt) {
 }
 
 Base.prototype.check = function () {
-  if (this.isValid()) {
+  if (this.isValid) {
     return this
+  } else if (this.isError) {
+    throw this[VALUE]
   }
-  throw new TypeError(`Invalid value ${this} (should be ${this[DESCRIPTION]})`)
+  throw new TypeError(`Invalid ${this[DESCRIPTION]}: ${this}`)
 }
 
 Base.prototype.or = function (fallback) {
-  return this.isValid() ? this : new this.constructor(fallback)
+  return this.isValid ? this : new this.constructor(fallback)
 }
 
-Base.prototype.value = function () {
-  if (this.isValid()) {
-    return this[VALUE]
-  }
-  throw new TypeError(`Invalid value ${this} (should be ${this[DESCRIPTION]})`)
-}
-
-Base.prototype.it = function () {
-  if (!this.isValid()) {
-    throw new TypeError(`Invalid value ${this} (should be ${this[DESCRIPTION]})`)
-  }
-  var val, it
-  val = this[VALUE]
-
-  if (typeof val !== 'string' && !(val instanceof String)) {
-    it = (val[Symbol.asyncIterator] && val[Symbol.asyncIterator]()) || getIterator(val)
-  }
-  function * create () {
-    yield val
-  }
-  return it || create()
-}
-
-Base.prototype.isValid = function () {
-  if (typeof this.constructor.isValid !== 'function') {
-    throw new TypeError(NO_VALIDATOR + this[DESCRIPTION])
-  }
-  return this.constructor.isValid(this[VALUE])
+Base.prototype.value = Base.prototype.val = function () {
+  return this.check()[VALUE]
 }
 
 Base.prototype.toString = function () {
