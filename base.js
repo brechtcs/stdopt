@@ -1,19 +1,21 @@
 var DESCRIPTION = Symbol('description')
+var RAW = Symbol('raw')
 var VALUE = Symbol('value')
 
 function Base () {}
 
 Base.implement = function (name) {
   function Opt (val) {
-    if (typeof Opt.isValid !== 'function') {
-      throw new TypeError('No validator for ' + name)
+    if (typeof Opt.parse !== 'function') {
+      throw new TypeError('No parser for ' + name)
     } else if (!(this instanceof Opt)) {
       return new Opt(val)
     }
-    this[VALUE] = val
     this[DESCRIPTION] = name || 'stdopt'
-    this.isError = val instanceof Error
-    this.isValid = !this.isError && Opt.isValid(val)
+    this[RAW] = val
+    this[VALUE] = Opt.parse(val)
+    this.isError = this[VALUE] instanceof Error
+    this.isValid = !this.isError && this[VALUE] !== undefined
   }
 
   Object.setPrototypeOf(Opt.prototype, Base.prototype)
@@ -40,7 +42,7 @@ Base.prototype.check = function () {
   } else if (this.isError) {
     throw this[VALUE]
   }
-  throw new TypeError(`Invalid ${this[DESCRIPTION]}: ${this}`)
+  throw new TypeError(`Value ${this[RAW]} cannot be parsed as ${this[DESCRIPTION]}`)
 }
 
 Base.prototype.or = function (fallback) {
@@ -49,20 +51,6 @@ Base.prototype.or = function (fallback) {
 
 Base.prototype.value = Base.prototype.val = function () {
   return this.check()[VALUE]
-}
-
-Base.prototype.toString = function () {
-  var val = this[VALUE]
-  var ellipsis = ''
-
-  if (typeof val === 'string' || val instanceof String) {
-    val = val.substring(0, 27)
-    ellipsis = val.length > 27 ? '...' : ''
-  } else if (Array.isArray(val)) {
-    val = val.slice(0, 2)
-    ellipsis = val.length > 2 ? ',...' : ''
-  }
-  return String(val) + ellipsis
 }
 
 module.exports = Base

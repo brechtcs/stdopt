@@ -43,28 +43,18 @@ list([1, 2, 3]).value() // => [1, 2, 3]
 list(true).or([4, 5, 6]).value() // => [4, 5, 6]
 list({0: 'stuff', length: 1}).value() // => ['stuff']
 
-// create iterator for any type
-opt('some data').it().next() // => 'some data'
-string('some string').it().next() // => 'some string'
-number(5).it().next() // => 5
-boolean(true).it().next() // => true
-hash({stuff: true}).it().next() // => {stuff: true}
-
-var it = list([1, 2]).it()
-it.next() // => 1
-it.next() // => 2
-```
-
 ## Custom
 
-You can also create your own custom primitives, using the `Base` class and a custom `isValid` method.
+You can also create your own custom primitives,  by using the `Base` class and defining a custom static `parse` method.
 
 ```js
 var Base = require('stdopt/base')
 var lowercase = Base.implement('lowercase string')
 
-lowercase.isValid = function (value) {
-  return typeof value === 'string' && value.toLowerCase() === value
+lowercase.parse = function (value) {
+  if (typeof value === 'string' && value.toLowerCase() === value) {
+    return value.toLowerCase()
+  }
 }
 
 lowercase('oh.').value() // => 'oh.'

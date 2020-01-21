@@ -1,12 +1,13 @@
 var Base = require('./base')
 var Str = Base.implement('string')
 
-Str.isValid = function (s) {
-  return typeof s === 'string' || typeof s === 'number' || s instanceof String
-}
-
-Str.prototype.value = function () {
-  return String(Base.value(this))
+Str.parse = function (s) {
+  if (typeof s === 'string') {
+    return s
+  }
+  if (typeof s === 'number' || s instanceof String) {
+    return String(s)
+  }
 }
 
 module.exports = Str

@@ -1,6 +1,5 @@
 module.exports = require('./opt')
 module.exports.boolean = require('./boolean')
-module.exports.fn = require('./function')
 module.exports.hash = require('./hash')
 module.exports.list = require('./list')
 module.exports.number = require('./number')

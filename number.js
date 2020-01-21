@@ -1,12 +1,11 @@
 var Base = require('./base')
 var Num = Base.implement('number')
 
-Num.isValid = function (n) {
-  return !Number.isNaN(Number(n))
-}
-
-Num.prototype.value = function () {
-  return Number(Base.value(this))
+Num.parse = function (n) {
+  var number = Number(n)
+  if (!Number.isNaN(number)) {
+    return number
+  }
 }
 
 module.exports = Num

@@ -3,11 +3,9 @@ var isArrayish = require('is-arrayish')
 
 var List = Base.implement('list')
 
-List.isValid = isArrayish
-
-List.prototype.value = function () {
-  var list = Base.value(this)
-  return Array.isArray(list) ? list : Array.from(list)
+List.parse = function (l) {
+  if (Array.isArray(l)) return l
+  if (isArrayish(l)) return Array.from(l)
 }
 
 module.exports = List

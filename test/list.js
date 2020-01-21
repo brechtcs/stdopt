@@ -6,5 +6,6 @@ test('list', t => {
   t.deepEqual(list({ 0: 1, length: 1 }).value(), [1])
   t.deepEqual(list('blerf').or([]).value(), [])
   t.deepEqual(list('blerf').or({ 0: 1, length: 1 }).value(), [1])
+  t.throws(() => list(true).value(), /Value true cannot be parsed as list/)
   t.end()
 })

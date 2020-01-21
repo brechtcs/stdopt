@@ -7,5 +7,6 @@ test('boolean', t => {
   t.equal(boolean('False').value(), false)
   t.equal(boolean('True').value(), true)
   t.equal(boolean('Truthy').or(false).value(), false)
+  t.throws(() => boolean('nope').value(), /Value nope cannot be parsed as boolean/)
   t.end()
 })
