@@ -18,6 +18,10 @@ Base.implement = function (name) {
     this.isValid = !this.isError && this[VALUE] !== undefined
   }
 
+  Opt.isValid = function (val) {
+    return Opt(val).isValid
+  }
+
   Object.setPrototypeOf(Opt.prototype, Base.prototype)
   Object.defineProperty(Opt, 'super_', {
     value: Base,
