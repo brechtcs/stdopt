@@ -1,25 +1,23 @@
-var DESCRIPTION = Symbol('description')
-var RAW = Symbol('raw')
 var VALUE = Symbol('value')
-
 function Base () {}
 
-Base.implement = function (name) {
+Base.implement = function (descr) {
   function Opt (val) {
     if (typeof Opt.parse !== 'function') {
-      throw new TypeError('No parser for ' + name)
+      throw new TypeError('No parser for ' + descr)
     } else if (!(this instanceof Opt)) {
       return new Opt(val)
     }
-    this[DESCRIPTION] = name || 'stdopt'
-    this[RAW] = val
-    this[VALUE] = Opt.parse(val)
-    this.isError = this[VALUE] instanceof Error
-    this.isValid = !this.isError && this[VALUE] !== undefined
-  }
 
-  Opt.isValid = function (val) {
-    return Opt(val).isValid
+    var nested = val instanceof Base ? val[VALUE] : val
+    var parsed = nested instanceof Error ? nested : Opt.parse(nested)
+
+    this[VALUE] = parsed === undefined
+      ? new TypeError(`Value ${val} cannot be parsed as ${descr}`)
+      : parsed
+
+    this.isError = this[VALUE] instanceof Error
+    this.isValid = !this.isError
   }
 
   Object.setPrototypeOf(Opt.prototype, Base.prototype)
@@ -40,21 +38,28 @@ Base.value = function (opt) {
   return Base.prototype.value.call(opt)
 }
 
-Base.prototype.check = function () {
-  if (this.isValid) {
-    return this
-  } else if (this.isError) {
-    throw this[VALUE]
-  }
-  throw new TypeError(`Value ${this[RAW]} cannot be parsed as ${this[DESCRIPTION]}`)
-}
-
 Base.prototype.or = function (fallback) {
   return this.isValid ? this : new this.constructor(fallback)
 }
 
-Base.prototype.value = Base.prototype.val = function () {
-  return this.check()[VALUE]
+Base.prototype.use = function (map) {
+  if (typeof map === 'function') {
+    return this.isValid
+      ? map.call(this, null, this[VALUE])
+      : map.call(this, this[VALUE])
+  }
+
+  if (this.isValid) {
+    return this
+  }
+  throw this[VALUE]
+}
+
+Base.prototype.value = function () {
+  return this.use(function (err, val) {
+    if (err) throw err
+    return val
+  })
 }
 
 module.exports = Base

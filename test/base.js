@@ -1,7 +1,7 @@
 var test = require('tape')
 
 test('opt', t => {
-  var opt = require('../')
+  var { opt, string } = require('../')
 
   t.equal(opt('value').value(), 'value')
   t.throws(() => opt(null).value(), /Value should be defined/)
@@ -10,6 +10,14 @@ test('opt', t => {
   t.equal(opt().or('nope').value(), 'nope')
   t.equal(opt().or().or('nope').value(), 'nope')
   t.throws(() => opt(null).or(undefined).value())
+  t.throws(() => opt(undefined).use())
+  t.ok(opt('some').use().isValid)
+
+  t.equal(opt(opt('some')).value(), 'some')
+  t.equal(opt(opt(opt('other'))).value(), 'other')
+  t.equal(opt(string('value')).value(), 'value')
+  t.throws(() => opt(string()).value(), /Value undefined cannot be parsed as string/)
+  t.throws(() => string(opt()).value(), /Value should be defined/)
   t.end()
 })
 
@@ -20,6 +28,9 @@ test('custom', t => {
   var Unparseable = Base.implement('unparseable')
 
   Custom.parse = function (val) {
+    t.notOk(val instanceof Base)
+    t.notOk(val instanceof Error)
+
     if (typeof val !== 'string') {
       return new Error('Custom should be string')
     }
@@ -38,5 +49,9 @@ test('custom', t => {
   t.throws(() => Fail('stuff').or('bleh').value(), /No parser for fail/)
   t.throws(() => Fail('stuff').value(), /No parser for fail/)
   t.throws(() => Unparseable('any').value(), /Value any cannot be parsed as unparseable/)
+
+  t.equal(Custom(Custom('custom')).value(), 'custom')
+  t.throws(() => Custom(Unparseable('any')).value(), /Value any cannot be parsed as unparseable/)
+  t.throws(() => Unparseable(Custom(365)).value(), /Custom should be string/)
   t.end()
 })
