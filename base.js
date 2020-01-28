@@ -23,12 +23,20 @@ function Base (val) {
   }
 }
 
+Base.extract = function (opt) {
+  return Base.prototype.extract.call(opt)
+}
+
 Base.unwrap = function (opt) {
-  return opt[VALUE]
+  return Base.prototype.extract.call(opt)
 }
 
 Base.value = function (opt) {
   return Base.prototype.value.call(opt)
+}
+
+Base.prototype.extract = function () {
+  return this[VALUE]
 }
 
 Base.prototype.or = function (fallback) {
