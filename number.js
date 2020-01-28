@@ -1,11 +1,15 @@
 var Base = require('./base')
-var Num = Base.implement('number')
+var apply = require('./util/apply')
 
-Num.parse = function (n) {
+function number (n) {
+  Base.call(this, n)
+}
+
+number.parse = function (n) {
   var number = Number(n)
   if (!Number.isNaN(number)) {
     return number
   }
 }
 
-module.exports = Num
+module.exports = apply(number)

@@ -1,7 +1,11 @@
 var Base = require('./base')
-var Str = Base.implement('string')
+var apply = require('./util/apply')
 
-Str.parse = function (s) {
+function string (s) {
+  Base.call(this, s)
+}
+
+string.parse = function (s) {
   if (typeof s === 'string') {
     return s
   }
@@ -10,4 +14,4 @@ Str.parse = function (s) {
   }
 }
 
-module.exports = Str
+module.exports = apply(string)

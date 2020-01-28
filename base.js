@@ -1,33 +1,21 @@
+var prop = require('stdprop')
 var VALUE = Symbol('value')
-function Base () {}
 
-Base.implement = function (descr) {
-  function Opt (val) {
-    if (typeof Opt.parse !== 'function') {
-      throw new TypeError('No parser for ' + descr)
-    } else if (!(this instanceof Opt)) {
-      return new Opt(val)
-    }
-
-    var nested = val instanceof Base ? val[VALUE] : val
-    var parsed = nested instanceof Error ? nested : Opt.parse(nested)
-
-    this[VALUE] = parsed === undefined
-      ? new TypeError(`Value ${val} cannot be parsed as ${descr}`)
-      : parsed
-
-    this.isError = this[VALUE] instanceof Error
-    this.isValid = !this.isError
+function Base (val) {
+  if (typeof this.constructor.parse !== 'function') {
+    throw new TypeError('No parser for ' + this.constructor.name)
   }
 
-  Object.setPrototypeOf(Opt.prototype, Base.prototype)
-  Object.defineProperty(Opt, 'super_', {
-    value: Base,
-    configurable: true,
-    writable: true
-  })
+  var nested = (val && val[VALUE]) || val
+  var parsed = nested instanceof Error ? nested : this.constructor.parse(nested)
+  var value = parsed === undefined
+    ? new TypeError(`Value ${val} cannot be parsed as ${this.constructor.name}`)
+    : parsed
 
-  return Opt
+  prop(this, VALUE, value)
+  prop(this, 'isError', value instanceof Error, 'e')
+  prop(this, 'isValid', !this.isError, 'e')
+  Object.assign(this.constructor.prototype, Base.prototype)
 }
 
 Base.unwrap = function (opt) {

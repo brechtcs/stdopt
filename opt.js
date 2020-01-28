@@ -1,11 +1,15 @@
 var Base = require('./base')
-var Opt = Base.implement('value')
+var apply = require('./util/apply')
 
-Opt.parse = function (val) {
+function opt (val) {
+  Base.call(this, val)
+}
+
+opt.parse = function (val) {
   if (val !== undefined && val !== null) {
     return val
   }
   return new Error('Value should be defined')
 }
 
-module.exports = Opt
+module.exports = apply(opt)

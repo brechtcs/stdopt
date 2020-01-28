@@ -1,9 +1,12 @@
 var Base = require('./base')
+var apply = require('./util/apply')
 var isArrayish = require('is-arrayish')
 
-var Hash = Base.implement('hash')
+function hash (o) {
+  Base.call(this, o)
+}
 
-Hash.parse = function (o) {
+hash.parse = function (o) {
   if (isArrayish(o)) {
     return new TypeError(`Value ${o} is a list, should be hash`)
   }
@@ -12,4 +15,4 @@ Hash.parse = function (o) {
   }
 }
 
-module.exports = Hash
+module.exports = apply(hash)

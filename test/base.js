@@ -23,9 +23,11 @@ test('opt', t => {
 
 test('custom', t => {
   var Base = require('../base')
-  var Custom = Base.implement('custom')
-  var Fail = Base.implement('fail')
-  var Unparseable = Base.implement('unparseable')
+  var apply = require('../util/apply')
+
+  var Custom = apply(function Custom (input) {
+    Base.call(this, input)
+  })
 
   Custom.parse = function (val) {
     t.notOk(val instanceof Base)
@@ -40,18 +42,26 @@ test('custom', t => {
     return val
   }
 
+  var Fail = apply(function Fail (input) {
+    Base.call(this, input)
+  })
+
+  var Unparseable = apply(function Unparseable (input) {
+    Base.call(this, input)
+  })
+
   Unparseable.parse = function () {}
 
   t.equal(Custom('cUsToM').value(), 'cUsToM')
   t.equal(Custom('stuff').or('Custom').value(), 'Custom')
   t.throws(() => Custom(365).value(), /Custom should be string/)
   t.throws(() => Custom('stuff').value(), /Custom should contain/)
-  t.throws(() => Fail('stuff').or('bleh').value(), /No parser for fail/)
-  t.throws(() => Fail('stuff').value(), /No parser for fail/)
-  t.throws(() => Unparseable('any').value(), /Value any cannot be parsed as unparseable/)
+  t.throws(() => Fail('stuff').or('bleh').value(), /No parser for Fail/)
+  t.throws(() => Fail('stuff').value(), /No parser for Fail/)
+  t.throws(() => Unparseable('any').value(), /Value any cannot be parsed as Unparseable/)
 
   t.equal(Custom(Custom('custom')).value(), 'custom')
-  t.throws(() => Custom(Unparseable('any')).value(), /Value any cannot be parsed as unparseable/)
+  t.throws(() => Custom(Unparseable('any')).value(), /Value any cannot be parsed as Unparseable/)
   t.throws(() => Unparseable(Custom(365)).value(), /Custom should be string/)
   t.end()
 })

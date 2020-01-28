@@ -1,7 +1,11 @@
 var Base = require('./base')
-var Boolean = Base.implement('boolean')
+var apply = require('./util/apply')
 
-Boolean.parse = function (b) {
+function boolean (b) {
+  Base.call(this, b)
+}
+
+boolean.parse = function (b) {
   if (typeof b === 'boolean') {
     return b
   }
@@ -13,4 +17,4 @@ Boolean.parse = function (b) {
   }
 }
 
-module.exports = Boolean
+module.exports = apply(boolean)

@@ -1,11 +1,14 @@
 var Base = require('./base')
+var apply = require('./util/apply')
 var isArrayish = require('is-arrayish')
 
-var List = Base.implement('list')
+function list (l) {
+  Base.call(this, l)
+}
 
-List.parse = function (l) {
+list.parse = function (l) {
   if (Array.isArray(l)) return l
   if (isArrayish(l)) return Array.from(l)
 }
 
-module.exports = List
+module.exports = apply(list)

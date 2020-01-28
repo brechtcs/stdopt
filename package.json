@@ -1,13 +1,14 @@
 {
   "name": "stdopt",
-  "version": "6.0.0",
+  "version": "7.0.0",
   "description": "Wrap and validate optional values",
   "main": "index.js",
   "scripts": {
     "test": "tape test/*.js && standard"
   },
   "dependencies": {
-    "is-arrayish": "^0.3.2"
+    "is-arrayish": "^0.3.2",
+    "stdprop": "^1.0.1"
   },
   "devDependencies": {
     "standard": "^14.3.1",

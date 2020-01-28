@@ -49,7 +49,13 @@ You can also create your own custom primitives,  by using the `Base` class and d
 
 ```js
 var Base = require('stdopt/base')
-var lowercase = Base.implement('lowercase string')
+
+function lowercase (value) {
+  if (!(this instanceof lowercase)) {
+    return new lowercase(value)
+  }
+  Base.call(this, value)
+}
 
 lowercase.parse = function (value) {
   if (typeof value === 'string' && value.toLowerCase() === value) {
