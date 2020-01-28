@@ -1,4 +1,6 @@
+var inherits = require('inherits')
 var prop = require('stdprop')
+
 var VALUE = Symbol('value')
 
 function Base (val) {
@@ -6,7 +8,7 @@ function Base (val) {
     throw new TypeError('No parser for ' + this.constructor.name)
   }
 
-  var nested = (val && val[VALUE]) || val
+  var nested = val instanceof Base ? val[VALUE] : val
   var parsed = nested instanceof Error ? nested : this.constructor.parse(nested)
   var value = parsed === undefined
     ? new TypeError(`Value ${val} cannot be parsed as ${this.constructor.name}`)
@@ -15,7 +17,10 @@ function Base (val) {
   prop(this, VALUE, value)
   prop(this, 'isError', value instanceof Error, 'e')
   prop(this, 'isValid', !this.isError, 'e')
-  Object.assign(this.constructor.prototype, Base.prototype)
+
+  if (!(this instanceof Base)) {
+    inherits(this.constructor, Base)
+  }
 }
 
 Base.unwrap = function (opt) {
