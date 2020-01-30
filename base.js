@@ -4,13 +4,13 @@ var prop = require('stdprop')
 
 var VALUE = Symbol('value')
 
-function Base (val) {
+function Base (val, ...args) {
   if (typeof this.constructor.parse !== 'function') {
     throw new TypeError('No parser for ' + this.constructor.name)
   }
 
   var nested = val instanceof Base ? val[VALUE] : val
-  var parsed = nested instanceof Error ? nested : this.constructor.parse(nested)
+  var parsed = nested instanceof Error ? nested : this.constructor.parse(nested, ...args)
   var value = parsed === undefined
     ? new TypeError(`Value ${val} cannot be parsed as ${this.constructor.name}`)
     : parsed
