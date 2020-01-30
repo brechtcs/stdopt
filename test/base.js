@@ -1,8 +1,7 @@
 var test = require('tape')
 
 test('opt', t => {
-  var { opt, string } = require('../')
-
+  var { opt } = require('../')
   t.equal(opt('value').value(), 'value')
   t.throws(() => opt(null).value(), /Value should be defined/)
   t.throws(() => opt(null).or(new Error('nope')).value(), /nope/)
@@ -12,12 +11,6 @@ test('opt', t => {
   t.throws(() => opt(null).or(undefined).value())
   t.throws(() => opt(undefined).use())
   t.ok(opt('some').use().isValid)
-
-  t.equal(opt(opt('some')).value(), 'some')
-  t.equal(opt(opt(opt('other'))).value(), 'other')
-  t.equal(opt(string('value')).value(), 'value')
-  t.throws(() => opt(string()).value(), /Value undefined cannot be parsed as string/)
-  t.throws(() => string(opt()).value(), /Value should be defined/)
   t.end()
 })
 
