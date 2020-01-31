@@ -9,12 +9,7 @@ function Base (val, ...args) {
     throw new TypeError('No parser for ' + this.constructor.name)
   }
 
-  var nested = val instanceof Base ? val[VALUE] : val
-  var parsed = nested instanceof Error ? nested : this.constructor.parse(nested, ...args)
-  var value = parsed === undefined
-    ? new TypeError(`Value ${val} cannot be parsed as ${this.constructor.name}`)
-    : parsed
-
+  var value = parse.call(this, val, ...args)
   prop(this, VALUE, value)
   prop(this, 'isError', value instanceof Error, 'e')
   prop(this, 'isValid', !this.isError, 'e')
@@ -22,6 +17,17 @@ function Base (val, ...args) {
   if (!(this instanceof Base)) {
     inherits(this.constructor, Base)
   }
+}
+
+function parse (val, ...args) {
+  var nested, value
+  nested = val instanceof Base ? val[VALUE] : val
+  value = nested instanceof Error ? nested : this.constructor.parse(nested, ...args)
+
+  if (typeof value === 'undefined') {
+    return new TypeError(`Value ${val} cannot be parsed as ${this.constructor.name}`)
+  }
+  return value instanceof Base ? value[VALUE] : value
 }
 
 Base.extract = function (opt) {

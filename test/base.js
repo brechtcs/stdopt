@@ -35,6 +35,14 @@ test('custom', t => {
     return val
   }
 
+  var Nested = apply(function Nested (input) {
+    Base.call(this, input)
+  })
+
+  Nested.parse = function (input) {
+    return Custom(input)
+  }
+
   var Fail = apply(function Fail (input) {
     Base.call(this, input)
   })
@@ -47,8 +55,10 @@ test('custom', t => {
 
   t.equal(Custom('cUsToM').value(), 'cUsToM')
   t.equal(Custom('stuff').or('Custom').value(), 'Custom')
+  t.equal(Nested('custom').value(), 'custom')
   t.throws(() => Custom(365).value(), /Custom should be string/)
   t.throws(() => Custom('stuff').value(), /Custom should contain/)
+  t.throws(() => Nested('stuff').value(), /Custom should contain/)
   t.throws(() => Fail('stuff').or('bleh').value(), /No parser for Fail/)
   t.throws(() => Fail('stuff').value(), /No parser for Fail/)
   t.throws(() => Unparseable('any').value(), /Value any cannot be parsed as Unparseable/)
