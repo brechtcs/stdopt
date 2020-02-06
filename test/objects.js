@@ -37,7 +37,7 @@ var expected = {
   ]
 }
 
-test('types', t => {
+test('objects', t => {
   t.ok(list(['one', 'two'], string).isValid)
   t.ok(list(['one', true, 'three'], string).isError)
   t.deepEqual(list([1, 2], string).value(), ['1', '2'])
