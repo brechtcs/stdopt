@@ -16,25 +16,31 @@ hash.struct = function (s) {
 
 hash.parse = function (obj, struct) {
   if (typeof obj !== 'object') return
-  if (!struct) return obj
+  if (!struct) return Object.assign({}, obj)
 
-  var prop, opt, result
+  var descr, prop, opt, result
   result = {}
 
   for (prop of Object.keys(struct)) {
     if (typeof struct[prop] !== 'function') {
       throw new Error('Type should be function')
     }
+    descr = Object.getOwnPropertyDescriptor(obj, prop)
     opt = struct[prop](obj[prop])
 
     if (opt.isError) {
       var err = opt.extract()
       return new err.constructor(`${prop} -> ${err.message}`)
     } else {
-      result[prop] = opt.value()
+      descr.value = opt.value()
+      Object.defineProperty(result, prop, descr)
     }
   }
   return result
+}
+
+hash.prototype.value = function () {
+  return Object.freeze(Base.value(this))
 }
 
 module.exports = apply(hash)

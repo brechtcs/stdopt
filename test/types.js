@@ -1,4 +1,5 @@
 var { hash, list, number, string } = require('../')
+var { prop } = require('stdprop')
 var test = require('tape')
 
 var Item = hash.struct({
@@ -42,5 +43,25 @@ test('types', t => {
   t.deepEqual(list([1, 2], string).value(), ['1', '2'])
   t.deepEqual(hash(valid, Struct).value(), expected)
   t.throws(() => hash(invalid, Struct).value(), /items -> \[1\] -> data -> Value two cannot be parsed as number/)
+
+  var arr = list([1, 2, 3]).value()
+  arr[1] = 'two'
+  t.equal(arr[1], 2)
+  t.throws(() => arr.push(4))
+
+  var count = 0
+  var struct = { hidden: number, prop: number }
+  var input = {}
+  prop(input, 'hidden', 8, 'w')
+  prop(input, 'prop', 1, 'ew')
+  var out = hash(input, struct).value()
+  out.prop = 2
+  t.equal(out.prop, 1)
+  t.equal(out.hidden, 8)
+  for (var key in out) {
+    t.notOk(key === 'hidden')
+    count++
+  }
+  t.equal(count, 1)
   t.end()
 })

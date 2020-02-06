@@ -34,4 +34,8 @@ list.parse = function (l, type) {
   return result
 }
 
+list.prototype.value = function () {
+  return Object.freeze(Base.value(this))
+}
+
 module.exports = apply(list)
