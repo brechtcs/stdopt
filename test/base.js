@@ -8,6 +8,8 @@ test('opt', t => {
   t.equal(opt('value').or('nope').value(), 'value')
   t.equal(opt().or('nope').value(), 'nope')
   t.equal(opt().or().or('nope').value(), 'nope')
+  t.equal(opt().raw(), undefined)
+  t.equal(opt().or(null).raw(), null)
   t.throws(() => opt(null).or(undefined).value())
   t.throws(() => opt(undefined).use())
   t.ok(opt('some').use().isValid)

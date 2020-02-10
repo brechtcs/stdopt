@@ -2,6 +2,7 @@ var deprecate = require('deprecate')
 var inherits = require('inherits')
 var prop = require('stdprop')
 
+var RAW = Symbol('raw')
 var VALUE = Symbol('value')
 
 function Base (val, ...args) {
@@ -9,7 +10,10 @@ function Base (val, ...args) {
     throw new TypeError('No parser for ' + this.constructor.name)
   }
 
+  var raw = val instanceof Base ? val[VALUE] : val
   var value = parse.call(this, val, ...args)
+
+  prop(this, RAW, raw)
   prop(this, VALUE, value)
   prop(this, 'isError', value instanceof Error, 'e')
   prop(this, 'isValid', !this.isError, 'e')
@@ -34,6 +38,10 @@ Base.extract = function (opt) {
   return Base.prototype.extract.call(opt)
 }
 
+Base.raw = function (opt) {
+  return Base.prototype.raw.call(opt)
+}
+
 Base.unwrap = function (opt) {
   deprecate('Base.unwrap()', 'Use the equivalent Base.extract() instead.')
   return Base.prototype.extract.call(opt)
@@ -53,6 +61,10 @@ Base.prototype.or = function (Opt, fallback) {
     Opt = this.constructor
   }
   return this.isValid ? this : new Opt(fallback)
+}
+
+Base.prototype.raw = function () {
+  return this[RAW]
 }
 
 Base.prototype.use = function (map) {
