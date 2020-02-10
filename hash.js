@@ -18,23 +18,27 @@ hash.parse = function (obj, struct) {
   if (typeof obj !== 'object') return
   if (!struct) return Object.assign({}, obj)
 
-  var descr, prop, opt, result
+  var prop, opt, err, descr, result
   result = {}
 
   for (prop of Object.keys(struct)) {
     if (typeof struct[prop] !== 'function') {
       throw new Error('Type should be function')
     }
-    descr = Object.getOwnPropertyDescriptor(obj, prop)
     opt = struct[prop](obj[prop])
 
     if (opt.isError) {
-      var err = opt.extract()
+      err = opt.extract()
       return new err.constructor(`${prop} -> ${err.message}`)
-    } else {
-      descr.value = opt.value()
-      Object.defineProperty(result, prop, descr)
     }
+
+    descr = Object.getOwnPropertyDescriptor(obj, prop)
+    Object.defineProperty(result, prop, {
+      value: opt.value(),
+      configurable: descr ? descr.configurable : false,
+      enumerable: descr ? descr.enumerable : false,
+      writable: descr ? descr.writable : false
+    })
   }
   return result
 }

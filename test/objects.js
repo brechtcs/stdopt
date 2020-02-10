@@ -1,4 +1,4 @@
-var { hash, list, number, string } = require('../')
+var { hash, list, nothing, number, string } = require('../')
 var { prop } = require('stdprop')
 var test = require('tape')
 
@@ -9,6 +9,7 @@ var Item = hash.struct({
 
 var Struct = {
   description: string,
+  nope: nothing,
   items: list.of(Item)
 }
 
