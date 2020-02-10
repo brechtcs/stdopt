@@ -47,8 +47,12 @@ Base.prototype.extract = function () {
   return this[VALUE]
 }
 
-Base.prototype.or = function (fallback) {
-  return this.isValid ? this : new this.constructor(fallback)
+Base.prototype.or = function (Opt, fallback) {
+  if (typeof Opt !== 'function') {
+    fallback = Opt
+    Opt = this.constructor
+  }
+  return this.isValid ? this : new Opt(fallback)
 }
 
 Base.prototype.use = function (map) {
