@@ -6,6 +6,7 @@ function number (n) {
 }
 
 number.parse = function (n) {
+  if (n === null) return
   var number = Number(n)
   if (!Number.isNaN(number)) {
     return number
