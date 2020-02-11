@@ -9,8 +9,8 @@ var Item = hash.struct({
 
 var Struct = {
   description: string,
-  nope: nothing,
-  items: list.of(Item)
+  extra: [nothing, string],
+  items: list.of([nothing, Item])
 }
 
 var invalid = {
@@ -26,7 +26,8 @@ var valid = {
   description: 'valid struct',
   items: [
     { type: 'some', data: '25' },
-    { type: 'other', data: 8 }
+    { type: 'other', data: 8 },
+    null
   ]
 }
 
@@ -34,7 +35,8 @@ var expected = {
   description: 'valid struct',
   items: [
     { type: 'some', data: 25 },
-    { type: 'other', data: 8 }
+    { type: 'other', data: 8 },
+    null
   ]
 }
 
