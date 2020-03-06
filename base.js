@@ -1,4 +1,3 @@
-var deprecate = require('deprecate')
 var inherits = require('inherits')
 var prop = require('stdprop')
 
@@ -40,11 +39,6 @@ Base.extract = function (opt) {
 
 Base.raw = function (opt) {
   return Base.prototype.raw.call(opt)
-}
-
-Base.unwrap = function (opt) {
-  deprecate('Base.unwrap()', 'Use the equivalent Base.extract() instead.')
-  return Base.prototype.extract.call(opt)
 }
 
 Base.value = function (opt) {
