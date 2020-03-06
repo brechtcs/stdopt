@@ -1,6 +1,6 @@
 {
   "name": "stdopt",
-  "version": "9.4.0",
+  "version": "10.0.0",
   "description": "Wrap and validate optional values",
   "main": "index.js",
   "scripts": {
