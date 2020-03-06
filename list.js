@@ -1,5 +1,6 @@
 var Base = require('./base')
 var apply = require('./util/apply')
+var some = require('./opt')
 var isArrayish = require('is-arrayish')
 
 function list (l, type) {
@@ -16,7 +17,10 @@ list.of = function (type) {
 }
 
 list.parse = function (l, type) {
-  if (!isArrayish(l)) return
+  if (!isArrayish(l)) {
+    if (some(l).isValid) l = [l]
+    else return
+  }
   if (!type) return Array.from(l)
 
   var idx, t, opt, err, result

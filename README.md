@@ -40,7 +40,8 @@ hash([1, 2, 3]).value() // => throws error
 // list primitive
 var list = require('stdopt/list')
 list([1, 2, 3]).value() // => [1, 2, 3]
-list(true).or([4, 5, 6]).value() // => [4, 5, 6]
+list('one').value() // => ['one']
+list(null).or([4, 5, 6]).value() // => [4, 5, 6]
 list({0: 'stuff', length: 1}).value() // => ['stuff']
 ```
 
