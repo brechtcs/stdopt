@@ -45,7 +45,7 @@ test('objects', t => {
   t.ok(list(['one', true, 'three'], string).isError)
   t.deepEqual(list([1, 2], string).value(), ['1', '2'])
   t.deepEqual(hash(valid, Struct).value(), expected)
-  t.throws(() => hash(invalid, Struct).value(), /items -> \[1\] -> data -> Value two cannot be parsed as number/)
+  t.throws(() => hash(invalid, Struct).value(), /items: \[1\]: data: Value two cannot be parsed as number/)
 
   var arr = list([1, 2, 3]).value()
   arr[1] = 'two'

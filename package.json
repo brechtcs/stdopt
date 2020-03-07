@@ -1,6 +1,6 @@
 {
   "name": "stdopt",
-  "version": "10.0.0",
+  "version": "10.1.0",
   "description": "Wrap and validate optional values",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,8 @@
   "dependencies": {
     "inherits": "^2.0.4",
     "is-arrayish": "^0.3.2",
-    "stdprop": "^1.0.1"
+    "stdprop": "^1.0.1",
+    "verror": "^1.10.0"
   },
   "devDependencies": {
     "standard": "^14.3.1",

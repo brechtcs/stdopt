@@ -1,4 +1,5 @@
 var Base = require('./base')
+var VError = require('verror')
 var apply = require('./util/apply')
 
 function hash (obj, struct) {
@@ -41,7 +42,7 @@ hash.parse = function (obj, struct) {
 
     if (opt.isError) {
       err = opt.extract()
-      return new err.constructor(`${prop} -> ${err.message}`)
+      return new VError(err, prop)
     }
 
     descr = Object.getOwnPropertyDescriptor(obj, prop)

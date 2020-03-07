@@ -1,4 +1,5 @@
 var Base = require('./base')
+var VError = require('verror')
 var apply = require('./util/apply')
 var some = require('./opt')
 var isArrayish = require('is-arrayish')
@@ -41,7 +42,7 @@ list.parse = function (l, type) {
 
     if (opt.isError) {
       err = opt.extract()
-      return new err.constructor(`[${idx}] -> ${err.message}`)
+      return new VError(err, `[${idx}]`)
     } else {
       result.push(opt.value())
     }
