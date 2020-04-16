@@ -1,5 +1,4 @@
 var Base = require('./base')
-var apply = require('./util/apply')
 
 function number (n) {
   Base.call(this, n)
@@ -13,4 +12,4 @@ number.parse = function (n) {
   }
 }
 
-module.exports = apply(number)
+module.exports = Base.construct(number)

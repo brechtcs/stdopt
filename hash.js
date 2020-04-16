@@ -1,6 +1,5 @@
 var Base = require('./base')
 var VError = require('verror')
-var apply = require('./util/apply')
 
 function hash (obj, struct) {
   if (struct && typeof struct !== 'object') {
@@ -60,4 +59,4 @@ hash.prototype.value = function () {
   return Object.freeze(Base.value(this))
 }
 
-module.exports = apply(hash)
+module.exports = Base.construct(hash)

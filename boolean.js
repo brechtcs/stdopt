@@ -1,5 +1,4 @@
 var Base = require('./base')
-var apply = require('./util/apply')
 
 function boolean (b) {
   Base.call(this, b)
@@ -17,4 +16,4 @@ boolean.parse = function (b) {
   }
 }
 
-module.exports = apply(boolean)
+module.exports = Base.construct(boolean)

@@ -33,6 +33,12 @@ function parse (val, ...args) {
   return value instanceof Base ? value[VALUE] : value
 }
 
+Base.construct = function (Opt) {
+  return new Proxy(Opt, {
+    apply: (Target, self, args) => new Target(...args)
+  })
+}
+
 Base.extract = function (opt) {
   return Base.prototype.extract.call(opt)
 }

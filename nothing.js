@@ -1,5 +1,4 @@
 var Base = require('./base')
-var apply = require('./util/apply')
 
 function nothing (n) {
   Base.call(this, n)
@@ -11,4 +10,4 @@ nothing.parse = function (n) {
   }
 }
 
-module.exports = apply(nothing)
+module.exports = Base.construct(nothing)

@@ -18,9 +18,8 @@ test('opt', t => {
 
 test('custom', t => {
   var Base = require('../base')
-  var apply = require('../util/apply')
 
-  var Custom = apply(function Custom (input) {
+  var Custom = Base.construct(function Custom (input) {
     Base.call(this, input)
   })
 
@@ -37,7 +36,7 @@ test('custom', t => {
     return val
   }
 
-  var Nested = apply(function Nested (input) {
+  var Nested = Base.construct(function Nested (input) {
     Base.call(this, input)
   })
 
@@ -45,11 +44,11 @@ test('custom', t => {
     return Custom(input)
   }
 
-  var Fail = apply(function Fail (input) {
+  var Fail = Base.construct(function Fail (input) {
     Base.call(this, input)
   })
 
-  var Unparseable = apply(function Unparseable (input) {
+  var Unparseable = Base.construct(function Unparseable (input) {
     Base.call(this, input)
   })
 

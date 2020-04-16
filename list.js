@@ -1,6 +1,5 @@
 var Base = require('./base')
 var VError = require('verror')
-var apply = require('./util/apply')
 var some = require('./opt')
 var isArrayish = require('is-arrayish')
 
@@ -54,4 +53,4 @@ list.prototype.value = function () {
   return Object.freeze(Base.value(this))
 }
 
-module.exports = apply(list)
+module.exports = Base.construct(list)
