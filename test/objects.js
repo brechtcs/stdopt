@@ -1,6 +1,13 @@
 var { hash, list, nothing, number, string } = require('../')
 var { prop } = require('stdprop')
+var Base = require('../base')
 var test = require('tape')
+
+class Custom extends Base {
+  static parse (val) {
+    return val
+  }
+}
 
 var Item = hash.struct({
   type: string,
@@ -8,12 +15,14 @@ var Item = hash.struct({
 })
 
 var Struct = {
+  custom: Custom,
   description: string,
   extra: [nothing, string],
   items: list.of([nothing, Item])
 }
 
 var invalid = {
+  custom: 1,
   description: 'invalid struct',
   items: [
     { type: 'valid', data: 1 },
@@ -23,6 +32,7 @@ var invalid = {
 
 var valid = {
   ping: 'pong',
+  custom: new Custom(false),
   description: 'valid struct',
   items: [
     { type: 'some', data: '25' },
@@ -32,6 +42,7 @@ var valid = {
 }
 
 var expected = {
+  custom: false,
   description: 'valid struct',
   items: [
     { type: 'some', data: 25 },

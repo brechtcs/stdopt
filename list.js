@@ -16,27 +16,27 @@ list.of = function (type) {
   }
 }
 
-list.parse = function (l, type) {
+list.parse = function (l, Type) {
   if (!isArrayish(l)) {
     if (some(l).isValid) l = [l]
     else return
   }
-  if (!type) return Array.from(l)
+  if (!Type) return Array.from(l)
 
-  var idx, t, opt, err, result
+  var T, idx, opt, err, result
   result = []
 
   for (idx = 0; idx < l.length; idx++) {
-    if (type[Symbol.iterator]) {
-      for (t of type) {
-        if (typeof t !== 'function') {
+    if (Type[Symbol.iterator]) {
+      for (T of Type) {
+        if (typeof T !== 'function') {
           throw new Error('Type should be function')
         }
-        opt = t(l[idx])
+        opt = new T(l[idx])
         if (opt.isValid) break
       }
     } else {
-      opt = type(l[idx])
+      opt = new Type(l[idx])
     }
 
     if (opt.isError) {

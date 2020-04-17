@@ -18,7 +18,7 @@ hash.parse = function (obj, struct) {
   if (typeof obj !== 'object') return
   if (!struct) return Object.assign({}, obj)
 
-  var prop, it, type, opt, err, descr, result
+  var Type, prop, it, opt, err, descr, result
   result = {}
 
   for (prop of Object.keys(struct)) {
@@ -28,15 +28,16 @@ hash.parse = function (obj, struct) {
     }
 
     if (it) {
-      for (type of struct[prop]) {
-        if (typeof type !== 'function') {
+      for (Type of struct[prop]) {
+        if (typeof Type !== 'function') {
           throw new Error('Type should be function')
         }
-        opt = type(obj ? obj[prop] : obj)
+        opt = new Type(obj ? obj[prop] : obj)
         if (opt.isValid) break
       }
     } else {
-      opt = struct[prop](obj ? obj[prop] : obj)
+      Type = struct[prop]
+      opt = new Type(obj ? obj[prop] : obj)
     }
 
     if (opt.isError) {
