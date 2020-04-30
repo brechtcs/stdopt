@@ -1,7 +1,7 @@
-var Base = require('../opt')
+var Opt = require('../opt')
 
 function some (val) {
-  Base.call(this, val)
+  Opt.call(this, val)
 }
 
 some.parse = function (val) {
@@ -11,4 +11,4 @@ some.parse = function (val) {
   return new Error('Value should be defined')
 }
 
-module.exports = Base.construct(some)
+module.exports = Opt.construct(some)

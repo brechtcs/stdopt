@@ -17,14 +17,14 @@ test('some', t => {
 })
 
 test('custom', t => {
-  var Base = require('../opt')
+  var Opt = require('../opt')
 
-  var Custom = Base.construct(function Custom (input) {
-    Base.call(this, input)
+  var Custom = Opt.construct(function Custom (input) {
+    Opt.call(this, input)
   })
 
   Custom.parse = function (val) {
-    t.notOk(val instanceof Base)
+    t.notOk(val instanceof Opt)
     t.notOk(val instanceof Error)
 
     if (typeof val !== 'string') {
@@ -36,20 +36,20 @@ test('custom', t => {
     return val
   }
 
-  var Nested = Base.construct(function Nested (input) {
-    Base.call(this, input)
+  var Nested = Opt.construct(function Nested (input) {
+    Opt.call(this, input)
   })
 
   Nested.parse = function (input) {
     return Custom(input)
   }
 
-  var Fail = Base.construct(function Fail (input) {
-    Base.call(this, input)
+  var Fail = Opt.construct(function Fail (input) {
+    Opt.call(this, input)
   })
 
-  var Unparseable = Base.construct(function Unparseable (input) {
-    Base.call(this, input)
+  var Unparseable = Opt.construct(function Unparseable (input) {
+    Opt.call(this, input)
   })
 
   Unparseable.parse = function () {}

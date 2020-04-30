@@ -4,12 +4,12 @@ var prop = require('stdprop')
 var RAW = Symbol('raw')
 var VALUE = Symbol('value')
 
-function Base (val, ...args) {
+function Opt (val, ...args) {
   if (typeof this.constructor.parse !== 'function') {
     throw new TypeError('No parser for ' + this.constructor.name)
   }
 
-  var raw = val instanceof Base ? val[VALUE] : val
+  var raw = val instanceof Opt ? val[VALUE] : val
   var value = parse.call(this, val, ...args)
 
   prop(this, RAW, raw)
@@ -17,45 +17,45 @@ function Base (val, ...args) {
   prop(this, 'isError', value instanceof Error, 'e')
   prop(this, 'isValid', !this.isError, 'e')
 
-  if (!(this instanceof Base)) {
-    inherits(this.constructor, Base)
+  if (!(this instanceof Opt)) {
+    inherits(this.constructor, Opt)
   }
 }
 
 function parse (val, ...args) {
   var nested, value
-  nested = val instanceof Base ? val[VALUE] : val
+  nested = val instanceof Opt ? val[VALUE] : val
   value = nested instanceof Error ? nested : this.constructor.parse(nested, ...args)
 
   if (typeof value === 'undefined') {
     return new TypeError(`Value ${val} cannot be parsed as ${this.constructor.name}`)
   }
-  return value instanceof Base ? value[VALUE] : value
+  return value instanceof Opt ? value[VALUE] : value
 }
 
-Base.construct = function (Opt) {
+Opt.construct = function (Opt) {
   return new Proxy(Opt, {
     apply: (Target, self, args) => new Target(...args)
   })
 }
 
-Base.extract = function (opt) {
-  return Base.prototype.extract.call(opt)
+Opt.extract = function (opt) {
+  return Opt.prototype.extract.call(opt)
 }
 
-Base.raw = function (opt) {
-  return Base.prototype.raw.call(opt)
+Opt.raw = function (opt) {
+  return Opt.prototype.raw.call(opt)
 }
 
-Base.value = function (opt) {
-  return Base.prototype.value.call(opt)
+Opt.value = function (opt) {
+  return Opt.prototype.value.call(opt)
 }
 
-Base.prototype.extract = function () {
+Opt.prototype.extract = function () {
   return this[VALUE]
 }
 
-Base.prototype.or = function (Opt, fallback) {
+Opt.prototype.or = function (Opt, fallback) {
   if (typeof Opt !== 'function') {
     fallback = Opt
     Opt = this.constructor
@@ -63,11 +63,11 @@ Base.prototype.or = function (Opt, fallback) {
   return this.isValid ? this : new Opt(fallback)
 }
 
-Base.prototype.raw = function () {
+Opt.prototype.raw = function () {
   return this[RAW]
 }
 
-Base.prototype.use = function (map) {
+Opt.prototype.use = function (map) {
   if (typeof map === 'function') {
     return this.isValid
       ? map.call(this, null, this[VALUE])
@@ -80,11 +80,11 @@ Base.prototype.use = function (map) {
   throw this[VALUE]
 }
 
-Base.prototype.value = function () {
+Opt.prototype.value = function () {
   return this.use(function (err, val) {
     if (err) throw err
     return val
   })
 }
 
-module.exports = Base
+module.exports = Opt

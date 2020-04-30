@@ -1,4 +1,4 @@
-var Base = require('../opt')
+var Opt = require('../opt')
 var VError = require('verror')
 var some = require('./some')
 var isArrayish = require('is-arrayish')
@@ -7,7 +7,7 @@ function list (l, type) {
   if (type && typeof type !== 'function' && !type[Symbol.iterator]) {
     throw new Error('Type should be function')
   }
-  Base.call(this, l, type)
+  Opt.call(this, l, type)
 }
 
 list.of = function (type) {
@@ -50,7 +50,7 @@ list.parse = function (l, Type) {
 }
 
 list.prototype.value = function () {
-  return Object.freeze(Base.value(this))
+  return Object.freeze(Opt.value(this))
 }
 
-module.exports = Base.construct(list)
+module.exports = Opt.construct(list)

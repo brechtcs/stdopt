@@ -1,7 +1,7 @@
-var Base = require('../opt')
+var Opt = require('../opt')
 
 function string (s) {
-  Base.call(this, s)
+  Opt.call(this, s)
 }
 
 string.parse = function (s) {
@@ -13,4 +13,4 @@ string.parse = function (s) {
   }
 }
 
-module.exports = Base.construct(string)
+module.exports = Opt.construct(string)

@@ -1,11 +1,11 @@
-var Base = require('../opt')
+var Opt = require('../opt')
 var VError = require('verror')
 
 function hash (obj, struct) {
   if (struct && typeof struct !== 'object') {
     throw new Error('Struct should be object')
   }
-  Base.call(this, obj, struct)
+  Opt.call(this, obj, struct)
 }
 
 hash.struct = function (s) {
@@ -57,7 +57,7 @@ hash.parse = function (obj, struct) {
 }
 
 hash.prototype.value = function () {
-  return Object.freeze(Base.value(this))
+  return Object.freeze(Opt.value(this))
 }
 
-module.exports = Base.construct(hash)
+module.exports = Opt.construct(hash)

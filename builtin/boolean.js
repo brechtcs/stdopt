@@ -1,7 +1,7 @@
-var Base = require('../opt')
+var Opt = require('../opt')
 
 function boolean (b) {
-  Base.call(this, b)
+  Opt.call(this, b)
 }
 
 boolean.parse = function (b) {
@@ -16,4 +16,4 @@ boolean.parse = function (b) {
   }
 }
 
-module.exports = Base.construct(boolean)
+module.exports = Opt.construct(boolean)

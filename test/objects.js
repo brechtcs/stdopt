@@ -1,9 +1,9 @@
 var { hash, list, nothing, number, string } = require('../')
 var { prop } = require('stdprop')
-var Base = require('../opt')
+var Opt = require('../opt')
 var test = require('tape')
 
-class Custom extends Base {
+class Custom extends Opt {
   static parse (val) {
     return val
   }
