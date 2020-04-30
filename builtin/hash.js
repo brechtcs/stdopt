@@ -1,4 +1,4 @@
-var Base = require('./base')
+var Base = require('../opt')
 var VError = require('verror')
 
 function hash (obj, struct) {

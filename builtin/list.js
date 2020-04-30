@@ -1,6 +1,6 @@
-var Base = require('./base')
+var Base = require('../opt')
 var VError = require('verror')
-var some = require('./opt')
+var some = require('./some')
 var isArrayish = require('is-arrayish')
 
 function list (l, type) {

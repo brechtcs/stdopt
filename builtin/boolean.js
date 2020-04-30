@@ -1,4 +1,4 @@
-var Base = require('./base')
+var Base = require('../opt')
 
 function boolean (b) {
   Base.call(this, b)

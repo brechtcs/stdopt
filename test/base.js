@@ -17,7 +17,7 @@ test('some', t => {
 })
 
 test('custom', t => {
-  var Base = require('../base')
+  var Base = require('../opt')
 
   var Custom = Base.construct(function Custom (input) {
     Base.call(this, input)

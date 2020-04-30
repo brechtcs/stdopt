@@ -1,4 +1,4 @@
-var Base = require('./base')
+var Base = require('../opt')
 
 function nothing (n) {
   Base.call(this, n)
