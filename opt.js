@@ -1,3 +1,4 @@
+var OptError = require('./error')
 var inherits = require('inherits')
 var prop = require('stdprop')
 
@@ -28,7 +29,7 @@ function parse (val, ...args) {
   value = nested instanceof Error ? nested : this.constructor.parse(nested, ...args)
 
   if (typeof value === 'undefined') {
-    return new TypeError(`Value ${val} cannot be parsed as ${this.constructor.name}`)
+    return new OptError(`Value ${val} cannot be parsed as ${this.constructor.name}`)
   }
   return value instanceof Opt ? value[VALUE] : value
 }
@@ -51,8 +52,38 @@ Opt.value = function (opt) {
   return Opt.prototype.value.call(opt)
 }
 
+Opt.prototype.catch = function (Type, fn) {
+  if (this.isValid) return this
+  if (typeof fn !== 'function') {
+    fn = Type
+    Type = OptError
+  }
+
+  if (!(this[VALUE] instanceof Type)) {
+    return this
+  }
+
+  try {
+    var val = typeof fn === 'string'
+      ? new OptError(this[VALUE], fn)
+      : fn(this[VALUE])
+    return new this.constructor(val)
+  } catch (err) {
+    return new this.constructor(err)
+  }
+}
+
 Opt.prototype.extract = function () {
   return this[VALUE]
+}
+
+Opt.prototype.map = function (fn) {
+  try {
+    var val = this.isValid ? fn(this[VALUE]) : this
+    return new this.constructor(val)
+  } catch (err) {
+    return new this.constructor(err)
+  }
 }
 
 Opt.prototype.or = function (Opt, fallback) {
@@ -67,24 +98,11 @@ Opt.prototype.raw = function () {
   return this[RAW]
 }
 
-Opt.prototype.use = function (map) {
-  if (typeof map === 'function') {
-    return this.isValid
-      ? map.call(this, null, this[VALUE])
-      : map.call(this, this[VALUE])
-  }
-
+Opt.prototype.value = function () {
   if (this.isValid) {
-    return this
+    return this[VALUE]
   }
   throw this[VALUE]
-}
-
-Opt.prototype.value = function () {
-  return this.use(function (err, val) {
-    if (err) throw err
-    return val
-  })
 }
 
 module.exports = Opt

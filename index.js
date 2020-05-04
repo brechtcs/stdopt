@@ -1,5 +1,6 @@
 module.exports = require('./opt')
 module.exports.Opt = require('./opt')
+module.exports.OptError = require('./error')
 module.exports.boolean = require('./builtin/boolean')
 module.exports.hash = require('./builtin/hash')
 module.exports.list = require('./builtin/list')

@@ -11,8 +11,6 @@ test('some', t => {
   t.equal(some().raw(), undefined)
   t.equal(some().or(null).raw(), null)
   t.throws(() => some(null).or(undefined).value())
-  t.throws(() => some(undefined).use())
-  t.ok(some('some').use().isValid)
   t.end()
 })
 

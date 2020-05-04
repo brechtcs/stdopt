@@ -1,0 +1,17 @@
+var { string } = require('../')
+var test = require('tape')
+
+test('handlers', t => {
+  t.equal(string('five').map(s => s.toUpperCase()).value(), 'FIVE')
+  t.equal(string().catch(() => 5).value(), '5')
+  t.equal(string().map(s => s.toUpperCase()).catch(() => 5).value(), '5')
+  t.equal(string(5).map(s => s.path.to.nowhere).catch(TypeError, () => 5).value(), '5')
+  t.equal(string().catch(e => e.path.to.nowhere).catch(TypeError, () => 5).value(), '5')
+  t.throws(() => string(5).map(s => s.path.to.nowhere).catch(() => 5).value())
+  t.throws(() => string().catch(e => e.path.to.nowhere).catch(() => 5).value())
+  t.throws(() => string().catch(ReferenceError, () => 5).value())
+  t.throws(() => string().map(s => s.toUpperCase()).catch(e => new Error('fail')).value())
+  t.throws(() => string(null).map(s => s.toUpperCase()).value(), /Value null cannot be parsed as string/)
+  t.throws(() => string().catch('message').value(), /message: Value undefined cannot be parsed as string/)
+  t.end()
+})

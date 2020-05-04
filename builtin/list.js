@@ -1,11 +1,11 @@
 var Opt = require('../opt')
-var VError = require('verror')
+var OptError = require('../error')
 var some = require('./some')
 var isArrayish = require('is-arrayish')
 
 function list (l, type) {
   if (type && typeof type !== 'function' && !type[Symbol.iterator]) {
-    throw new Error('Type should be function')
+    throw new TypeError('Type should be function')
   }
   Opt.call(this, l, type)
 }
@@ -30,7 +30,7 @@ list.parse = function (l, Type) {
     if (Type[Symbol.iterator]) {
       for (T of Type) {
         if (typeof T !== 'function') {
-          throw new Error('Type should be function')
+          throw new TypeError('Type should be function')
         }
         opt = new T(l[idx])
         if (opt.isValid) break
@@ -41,7 +41,7 @@ list.parse = function (l, Type) {
 
     if (opt.isError) {
       err = opt.extract()
-      return new VError(err, `[${idx}]`)
+      return new OptError(err, `[${idx}]`)
     } else {
       result.push(opt.value())
     }

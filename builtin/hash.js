@@ -1,9 +1,9 @@
 var Opt = require('../opt')
-var VError = require('verror')
+var OptError = require('../error')
 
 function hash (obj, struct) {
   if (struct && typeof struct !== 'object') {
-    throw new Error('Struct should be object')
+    throw new TypeError('Struct should be object')
   }
   Opt.call(this, obj, struct)
 }
@@ -24,13 +24,13 @@ hash.parse = function (obj, struct) {
   for (prop of Object.keys(struct)) {
     it = struct[prop][Symbol.iterator]
     if (typeof struct[prop] !== 'function' && !it) {
-      throw new Error('Type should be function')
+      throw new TypeError('Type should be function')
     }
 
     if (it) {
       for (Type of struct[prop]) {
         if (typeof Type !== 'function') {
-          throw new Error('Type should be function')
+          throw new TypeError('Type should be function')
         }
         opt = new Type(obj ? obj[prop] : obj)
         if (opt.isValid) break
@@ -42,7 +42,7 @@ hash.parse = function (obj, struct) {
 
     if (opt.isError) {
       err = opt.extract()
-      return new VError(err, prop)
+      return new OptError(err, prop)
     }
 
     descr = Object.getOwnPropertyDescriptor(obj, prop)
