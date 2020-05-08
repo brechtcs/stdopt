@@ -5,7 +5,10 @@ function number (n) {
 }
 
 number.parse = function (n) {
-  if (n === null) return
+  if (n === null || n === false || n === true) {
+    return
+  }
+
   var number = Number(n)
   if (!Number.isNaN(number)) {
     return number
